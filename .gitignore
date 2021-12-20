@@ -29,11 +29,9 @@ yarn-error.log*
 
 # env
 .env
-.env.build
-.env.local
-.env.development.local
-.env.test.local
-.env.production
+*.env
+.*.env
+!*.example.env
 .env.production.local
 *.pem
 
