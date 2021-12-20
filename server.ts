@@ -1,10 +1,17 @@
+import "reflect-metadata";
+
 import fs from "fs";
+import path from "path";
 import http from "http";
 import https from "https";
 import express from "express";
 import cors from "cors";
+import bodyParser from "body-parser";
+import { createConnection } from "typeorm";
 
-import { NODE_ENV, HTTP_PORT, HTTPS_PORT } from "./src/config";
+import { User } from "./src/entities/User";
+import router from "./src/routes";
+import ENV from "./src/config";
 
 (async () => {
   const httpsOptions = {
@@ -12,15 +19,35 @@ import { NODE_ENV, HTTP_PORT, HTTPS_PORT } from "./src/config";
     cert: fs.readFileSync("sslcert/cert.pem"),
   };
 
+  const conn = await createConnection({
+    type: "postgres",
+    url: ENV.DB_URL,
+    logging: true,
+    synchronize: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
+    entities: [User],
+  });
+
+  await conn.runMigrations();
+
   const app = express();
 
   app.use(cors());
+  app.use(bodyParser.urlencoded({ extended: true }));
 
-  app.get("/ping", (_, res) => res.send("pong"));
+  app.use("/", router);
 
   const httpServer = http.createServer(app);
   const httpsServer = https.createServer(httpsOptions, app);
 
-  httpServer.listen(HTTP_PORT, () => console.log(`🚀 HTTP server is running in ${NODE_ENV} on port ${HTTP_PORT}`));
-  httpsServer.listen(HTTPS_PORT, () => console.log(`🚀 HTTPS server is running in ${NODE_ENV} on port ${HTTPS_PORT}`));
+  httpServer.listen(ENV.HTTP_PORT, () =>
+    console.log(
+      `🚀 HTTP server is running in ${ENV.NODE_ENV} on port ${ENV.HTTP_PORT}`
+    )
+  );
+  httpsServer.listen(ENV.HTTPS_PORT, () =>
+    console.log(
+      `🚀 HTTPS server is running in ${ENV.NODE_ENV} on port ${ENV.HTTPS_PORT}`
+    )
+  );
 })().catch((err) => console.error(err));
