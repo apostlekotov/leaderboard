@@ -6,7 +6,7 @@ import leaderboardController from "./leaderboard/ctrl";
 import authController from "./auth/ctrl";
 
 // Middlewares
-import { isAuth } from "../middlewares/isAuth.middleware";
+import { auth } from "../middlewares/auth.middleware";
 
 const router = Router();
 
@@ -17,7 +17,7 @@ router.route("/register").post(authController.register);
 router.route("/login").post(authController.login);
 
 // user
-router.route("/user/me").get(isAuth, userController.me);
+router.route("/user/me").get(auth, userController.me);
 
 // leaderboard
 router.route("/leaderboard").get(leaderboardController.getLeaderboard);

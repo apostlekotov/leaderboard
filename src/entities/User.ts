@@ -20,9 +20,15 @@ export class User extends BaseEntity {
 
   @Column()
   password!: string;
-
+  
   @Column()
   country!: string;
+
+  @Column({ default: 0 })
+  score!: number;
+
+  @Column({ default: 0 })
+  pb!: number;
 
   @CreateDateColumn()
   createdAt: Date;
