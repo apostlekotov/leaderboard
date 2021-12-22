@@ -7,13 +7,9 @@ import { User } from "../entities/User";
 export const connectDB = async () => {
   const conn = await createConnection({
     type: "postgres",
-    url: DATABASE_URL,
+    url: DATABASE_URL + '?sslmode=require',
     logging: false,
     synchronize: false,
-    // extra: {
-    //   ssl: true,
-    //   rejectUnauthorized: false
-    // },
     ssl: true,
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [User],
