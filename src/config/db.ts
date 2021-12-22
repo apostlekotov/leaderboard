@@ -10,9 +10,6 @@ export const connectDB = async () => {
     url: DATABASE_URL,
     logging: false,
     synchronize: false,
-    extra: {
-      ssl: true,
-    },
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [User],
   });
