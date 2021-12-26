@@ -55,7 +55,7 @@ const register = async (req: Request, res: Response) => {
 
     return res.status(201).json({ isSuccess: true, token });
   } catch (err) {
-    console.error(err);
+    console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
   }
 };
@@ -89,7 +89,7 @@ const login = async (req: Request, res: Response) => {
 
     return res.status(200).json({ isSuccess: true, token });
   } catch (err) {
-    console.error(err);
+    console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
   }
 };

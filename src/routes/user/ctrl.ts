@@ -10,7 +10,7 @@ const me = (req: Request, res: Response) => {
 
     return res.status(200).json({ isSuccess: true, user });
   } catch (err) {
-    console.error(err);
+    console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
   }
 };
@@ -90,7 +90,7 @@ const resetPassword = async (req: Request, res: Response) => {
       message: "User`s password was successfully updated",
     });
   } catch (err) {
-    console.error(err);
+    console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
   }
 };
@@ -107,7 +107,7 @@ const updateUserScore = async (req: Request, res: Response) => {
       message: "User`s score was successfully updated",
     });
   } catch (err) {
-    console.error(err);
+    console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
   }
 };
@@ -123,7 +123,7 @@ const deleteUser = async (req: Request, res: Response) => {
       message: "User was successfully deleted",
     });
   } catch (err) {
-    console.error(err);
+    console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
   }
 };

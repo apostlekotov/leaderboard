@@ -58,7 +58,7 @@ const getLeaderboard = async (req: Request, res: Response) => {
       // page,
     });
   } catch (err) {
-    console.error(err);
+    console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
   }
 };
@@ -76,7 +76,7 @@ const getLeaders = async (req: Request, res: Response) => {
 
     return res.status(200).json({ isSuccess: true, leaderboard });
   } catch (err) {
-    console.error(err);
+    console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
   }
 };
@@ -95,7 +95,7 @@ const clearLeaderboard = async (_: Request, res: Response) => {
       message: "Leaderboard was successfully cleared",
     });
   } catch (err) {
-    console.error(err);
+    console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
   }
 };
@@ -113,7 +113,7 @@ const clearLeaders = async (_: Request, res: Response) => {
       message: "Leaderboard and leaders was successfully cleared",
     });
   } catch (err) {
-    console.error(err);
+    console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
   }
 };
