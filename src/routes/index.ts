@@ -24,7 +24,7 @@ router.route("/user/me").get(auth, userController.me);
 
 router.route("/user/:id/verify-email").post(userController.verifyEmail);
 
-router.route("/user/reset-password").get(auth, userController.resetPassword);
+router.route("/user/reset-password").post(auth, userController.resetPassword);
 
 router
   .route("/user")
