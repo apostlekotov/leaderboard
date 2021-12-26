@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "./../config";
-import { User } from "./../entities/User";
+import { JWT_SECRET } from "../config";
+import { User } from "../entities/User";
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.headers.authorization)
@@ -21,14 +21,18 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
 
-    const user = await User.findOne(payload.id, {
-      select: ["id", "username", "email", "country", "score"],
-    });
+    const user = await User.findOne(payload.user.id);
 
     if (!user)
       return res.status(401).json({
         isSuccess: false,
-        message: "User not found",
+        message: "User is not found",
+      });
+
+    if (!user.isVerifiedEmail)
+      return res.status(403).json({
+        isSuccess: false,
+        message: "User`s email is not verified",
       });
 
     req.body.user = user;
