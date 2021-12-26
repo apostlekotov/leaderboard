@@ -1,9 +1,9 @@
-import { JWT_SECRET } from "./../../config/index";
 import { Request, Response } from "express";
 import { getConnection } from "typeorm";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
-import { User } from "./../../entities/User";
+import { User } from "../../entities/User";
+import { APP_JWT_SECRET, JWT_SECRET, NODE_ENV } from "../../config/index";
 
 const register = async (req: Request, res: Response) => {
   try {
@@ -47,7 +47,13 @@ const register = async (req: Request, res: Response) => {
       });
     }
 
-    return res.status(201).json({ isSuccess: true, user });
+    const { password: _, createdUser } = user;
+
+    const token = jwt.sign({ user: { ...createdUser } }, JWT_SECRET, {
+      expiresIn: "14d",
+    });
+
+    return res.status(201).json({ isSuccess: true, token });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
@@ -66,7 +72,7 @@ const login = async (req: Request, res: Response) => {
     if (!user)
       return res.status(404).json({
         isSuccess: false,
-        message: "User not found",
+        message: "User is not found",
       });
 
     if (!(await argon2.verify(user.password, password)))
@@ -75,9 +81,11 @@ const login = async (req: Request, res: Response) => {
         message: "Incorrect password",
       });
 
-    const { password: _, ...foundUser } = user;
+    const { password: _, ...loggedUser } = user;
 
-    const token = jwt.sign({ foundUser }, JWT_SECRET, { expiresIn: "14d" });
+    const token = jwt.sign({ user: { ...loggedUser } }, JWT_SECRET, {
+      expiresIn: "14d",
+    });
 
     return res.status(200).json({ isSuccess: true, token });
   } catch (err) {
@@ -86,4 +94,13 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-export default { register, login };
+const getAppToken = async (_: Request, res: Response) => {
+  if (NODE_ENV !== "development")
+    return res.status(405).json({ isSuccess: false, message: "Not allowed" });
+
+  const token = jwt.sign({}, APP_JWT_SECRET, { expiresIn: "1d" });
+
+  return res.status(200).json({ isSuccess: true, token });
+};
+
+export default { register, login, getAppToken };
