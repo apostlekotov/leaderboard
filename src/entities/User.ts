@@ -10,7 +10,7 @@ import {
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
-  id!: number;
+  id!: string;
 
   @Column({ unique: true })
   username!: string;
@@ -18,9 +18,12 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   email!: string;
 
-  @Column()
+  @Column({ default: false })
+  isVerifiedEmail: boolean;
+
+  @Column({ select: false })
   password!: string;
-  
+
   @Column()
   country!: string;
 
