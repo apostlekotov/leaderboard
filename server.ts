@@ -1,5 +1,7 @@
 import "reflect-metadata";
 
+import "colorts/lib/string";
+
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -7,6 +9,8 @@ import morgan from "morgan";
 import router from "./src/routes";
 import ENV from "./src/config";
 import { connectDB } from "./src/config/db";
+import { errorHandler } from "./src/middlewares/error.middleware";
+import { notFound } from "./src/middlewares/notFound.middleware";
 
 (async () => {
   await connectDB();
@@ -20,16 +24,14 @@ import { connectDB } from "./src/config/db";
 
   app.use("/", router);
 
-  app.use((_, res, __) => res.status(404).send("Resource not found"));
-
-  app.use((err, _, res, __) => {
-    console.error(err);
-    return res.status(500).send("Server Error");
-  });
+  app.use(notFound);
+  app.use(errorHandler);
 
   app.listen(ENV.PORT, () =>
-    console.log(`🚀 Server is running in ${ENV.NODE_ENV} on port ${ENV.PORT}`)
+    console.log(
+      `🚀 Server is running in ${ENV.NODE_ENV} on port ${ENV.PORT}`.yellow.bold
+    )
   );
-})().catch((err) => console.error(err));
+})().catch((err) => console.error(`Error: ${err}`.red));
 
-process.on("uncaughtException", (err) => console.error(err));
+process.on("uncaughtException", (err) => console.error(`Error: ${err}`.red));

@@ -8,7 +8,7 @@ export const connectDB = async () => {
   const conn = await createConnection({
     type: "postgres",
     url: DATABASE_URL,
-    logging: true,
+    logging: NODE_ENV === "development",
     synchronize: true,
     ssl: NODE_ENV !== "development",
     migrations: [path.join(__dirname, "./migrations/*")],
@@ -16,4 +16,6 @@ export const connectDB = async () => {
   });
 
   await conn.runMigrations();
+
+  console.log("🗄 Database connected".green);
 };
