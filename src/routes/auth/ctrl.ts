@@ -47,7 +47,7 @@ const register = async (req: Request, res: Response) => {
       });
     }
 
-    const { password: _, createdUser } = user;
+    const { password: _, ...createdUser } = user;
 
     const token = jwt.sign({ user: { ...createdUser } }, JWT_SECRET, {
       expiresIn: "14d",
