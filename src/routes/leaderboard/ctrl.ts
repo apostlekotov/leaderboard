@@ -25,7 +25,6 @@ const getLeaderboard = async (req: Request, res: Response) => {
     const [leaderboard] = await User.findAndCount(options);
 
     if (!leaderboard.find(({ id }) => id === user.id)) {
-      console.log(leaderboard[leaderboard.length - 1].score, user.score);
       const beforeChunk = await User.find({
         take: 2,
         where: {
