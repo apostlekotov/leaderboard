@@ -58,9 +58,20 @@ const verifyEmail = async (req: Request, res: Response) => {
 
 const resetPassword = async (req: Request, res: Response) => {
   try {
-    const user: User = req.body.user;
+    const login: string = req.params.login;
     const newPassword: string = req.body.password;
     const code: string = req.body.code;
+
+    const user = await User.findOne({
+      where: login.includes("@") ? { email: login } : { username: login },
+      select: ["id", "username", "email", "country", "score", "password"],
+    });
+
+    if (!user)
+      return res.status(404).json({
+        isSuccess: false,
+        message: "User is not found",
+      });
 
     if (!code && !newPassword) {
       sendEmail(
