@@ -53,7 +53,7 @@ const register = async (req: Request, res: Response) => {
       expiresIn: "14d",
     });
 
-    return res.status(201).json({ isSuccess: true, token });
+    return res.status(201).json({ isSuccess: true, user: createdUser, token });
   } catch (err) {
     console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
@@ -66,7 +66,17 @@ const login = async (req: Request, res: Response) => {
 
     const user = await User.findOne({
       where: login.includes("@") ? { email: login } : { username: login },
-      select: ["id", "username", "email", "country", "score", "password"],
+      select: [
+        "id",
+        "username",
+        "email",
+        "isVerifiedEmail",
+        "country",
+        "score",
+        "pb",
+        "password",
+        "createdAt",
+      ],
     });
 
     if (!user)
@@ -87,7 +97,7 @@ const login = async (req: Request, res: Response) => {
       expiresIn: "14d",
     });
 
-    return res.status(200).json({ isSuccess: true, token });
+    return res.status(200).json({ isSuccess: true, user: loggedUser, token });
   } catch (err) {
     console.error(`Error: ${err}`.red);
     return res.status(500).json({ isSuccess: false, message: "Server Error" });
