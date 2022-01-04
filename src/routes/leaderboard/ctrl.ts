@@ -24,7 +24,10 @@ const getLeaderboard = async (req: Request, res: Response) => {
 
     const [leaderboard] = await User.findAndCount(options);
 
-    if (!leaderboard.find(({ id }) => id === user.id)) {
+    if (
+      leaderboard.length > 0 &&
+      !leaderboard.find(({ id }) => id === user.id)
+    ) {
       const beforeChunk = await User.find({
         take: 2,
         where: {
