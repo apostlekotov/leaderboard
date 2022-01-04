@@ -86,6 +86,7 @@ appToken - jwt генерируем из рандомного объекта в 
 ```json
 {
   "isSuccess": true,
+  "user": User,
   "token": "eyJhbGciO..."
 }
 ```
@@ -106,6 +107,7 @@ appToken - jwt генерируем из рандомного объекта в 
 ```json
 {
   "isSuccess": true,
+  "user": User,
   "token": "eyJhbGciO..."
 }
 ```
