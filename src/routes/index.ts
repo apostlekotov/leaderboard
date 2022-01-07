@@ -24,13 +24,11 @@ router.route("/user/me").get(auth, userController.me);
 
 router.route("/user/:id/verify-email").post(userController.verifyEmail);
 
-router
-  .route("/user/:login/reset-password")
-  .post(auth, userController.resetPassword);
+router.route("/user/:login/reset-password").post(userController.resetPassword);
 
 router
   .route("/user")
-  .put([auth, appAuth], userController.updateUserScore)
+  .put([auth, appAuth], userController.updateUser)
   .delete(auth, userController.deleteUser);
 
 // leaderboard
