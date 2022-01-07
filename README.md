@@ -34,6 +34,7 @@ yarn && yarn build && yarn start
 | country         | `string`  |
 | score           | `number`  |
 | pb              | `number`  |
+| avatar          | `number`  |
 | createdAt       |  `Date`   |
 | updatedAt       |  `Date`   |
 
@@ -83,7 +84,7 @@ appToken - jwt генерируем из рандомного объекта в 
 | `login`      | `string` | Email или username |
 | `password`   | `string` | Пароль             |
 
-```json
+```ts
 {
   "isSuccess": true,
   "user": User,
@@ -104,7 +105,7 @@ appToken - jwt генерируем из рандомного объекта в 
 | `password`   | `string` |                        |
 | `country`    | `string` | Исползуйте внешний API |
 
-```json
+```ts
 {
   "isSuccess": true,
   "user": User,
@@ -130,7 +131,7 @@ appToken - jwt генерируем из рандомного объекта в 
   GET /user/me
 ```
 
-```json
+```ts
 {
   "isSuccess": true,
   "user": User
@@ -192,13 +193,13 @@ appToken - jwt генерируем из рандомного объекта в 
 | :------- | :-------: | :-------------------------------- |
 | `limit`  | `?number` | По дефолту берём 25 пользователей |
 
-```json
+```ts
 {
   "isSuccess": true,
   "leaderboard": User[],
   // если нет авторизированого пользователя в leaderboard
   // то пихаем в chunk
-  "chunk": User[]
+  "chunk": (...User, "place": number)[]
 }
 ```
 
@@ -227,7 +228,7 @@ appToken - jwt генерируем из рандомного объекта в 
 | :------ | :-------: | :-------------------------------- |
 | `limit` | `?number` | По дефолту берём 25 пользователей |
 
-```json
+```ts
 {
   "isSuccess": true,
   "leaderboard": User[]
