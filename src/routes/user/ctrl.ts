@@ -106,16 +106,22 @@ const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
-const updateUserScore = async (req: Request, res: Response) => {
+const updateUser = async (req: Request, res: Response) => {
   try {
     const user: User = req.body.user;
-    const score: number = req.body.score;
+    const score: number | undefined = req.body?.score;
+    const avatar: number | undefined = req.body?.avatar;
 
-    await User.update({ id: user.id }, { score });
+    const updatedData: { score?: number; avatar?: number } = {};
+
+    if (score) updatedData.score = score;
+    if (avatar) updatedData.avatar = avatar;
+
+    await User.update({ id: user.id }, updatedData);
 
     return res.status(200).json({
       isSuccess: true,
-      message: "User`s score was successfully updated",
+      message: "User was successfully updated",
     });
   } catch (err) {
     console.error(`Error: ${err}`.red);
@@ -139,4 +145,4 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-export default { me, verifyEmail, resetPassword, updateUserScore, deleteUser };
+export default { me, verifyEmail, resetPassword, updateUser, deleteUser };

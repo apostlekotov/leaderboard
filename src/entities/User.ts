@@ -33,6 +33,9 @@ export class User extends BaseEntity {
   @Column({ default: 0 })
   pb!: number;
 
+  @Column({ default: 0 })
+  avatar!: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
