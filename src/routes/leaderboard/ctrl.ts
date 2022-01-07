@@ -3,8 +3,9 @@ import {
   Between,
   FindManyOptions,
   getConnection,
-  LessThan,
+  LessThanOrEqual,
   MoreThan,
+  Not,
 } from "typeorm";
 import { User } from "../../entities/User";
 
@@ -17,9 +18,7 @@ const getLeaderboard = async (req: Request, res: Response) => {
     const options: FindManyOptions<User> = {
       take: +limit,
       // skip: +limit * (+page - 1),
-      where: { score: MoreThan(0) },
       order: { score: "DESC" },
-      select: ["id", "username", "country", "score", "pb"],
     };
 
     const [leaderboard] = await User.findAndCount(options);
@@ -28,6 +27,11 @@ const getLeaderboard = async (req: Request, res: Response) => {
       leaderboard.length > 0 &&
       !leaderboard.find(({ id }) => id === user.id)
     ) {
+      const userLeaderboardPlace = await User.count({
+        where: { score: MoreThan(user.score) },
+        order: { score: "DESC" },
+      });
+
       const beforeChunk = await User.find({
         take: 2,
         where: {
@@ -41,14 +45,26 @@ const getLeaderboard = async (req: Request, res: Response) => {
 
       const afterChunk = await User.find({
         take: 2,
-        where: { score: LessThan(user.score) },
+        where: { id: Not(user.id), score: LessThanOrEqual(user.score) },
         order: { score: "DESC" },
       });
 
       return res.status(200).json({
         isSuccess: true,
         leaderboard,
-        chunk: [...beforeChunk.reverse(), user, ...afterChunk],
+        chunk: [
+          ...beforeChunk
+            .map((user, i) => ({
+              ...user,
+              place: userLeaderboardPlace - i,
+            }))
+            .reverse(),
+          { ...user, place: userLeaderboardPlace + 1 },
+          ...afterChunk.map((user, i) => ({
+            ...user,
+            place: userLeaderboardPlace + i + 2,
+          })),
+        ],
         // page,
       });
     }
