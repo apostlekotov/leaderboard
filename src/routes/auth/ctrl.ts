@@ -3,7 +3,11 @@ import { getConnection } from "typeorm";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import { User } from "../../entities/User";
-import { APP_JWT_SECRET, JWT_SECRET, NODE_ENV } from "../../config/index";
+import {
+  APP_JWT_SECRET,
+  GEN_APP_AUTH_ENABLED,
+  JWT_SECRET,
+} from "../../config/index";
 
 const register = async (req: Request, res: Response) => {
   try {
@@ -105,7 +109,7 @@ const login = async (req: Request, res: Response) => {
 };
 
 const getAppToken = async (_: Request, res: Response) => {
-  if (NODE_ENV !== "development")
+  if (!GEN_APP_AUTH_ENABLED)
     return res.status(405).json({ isSuccess: false, message: "Not allowed" });
 
   const token = jwt.sign({}, APP_JWT_SECRET, { expiresIn: "1d" });
