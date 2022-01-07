@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon server.ts",
-    "start": "NODE_ENV=production node dist/server.js",
+    "start": "node dist/server.js",
     "build": "tsc"
   },
   "dependencies": {
