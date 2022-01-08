@@ -15,7 +15,7 @@ export const sendEmail = async (
   });
 
   const message = await transporter.sendMail({
-    from: "Pechkin <postman.igor.pechkin@gmail.com>",
+    from: "Octare Studio",
     to: email,
     subject,
     html: text,
