@@ -151,11 +151,12 @@ appToken - jwt генерируем из рандомного объекта в 
   POST /user/:login/reset-password
 ```
 
-### Update user score 🔒 🗝
+### Update user score or avatar 🔒 🗝
 
-| Тело запроса |   Тип    |
-| :----------- | :------: |
-| `score`      | `number` |
+| Тело запроса |    Тип    |
+| :----------- | :-------: |
+| `score`      | `?number` |
+| `avatar`     | `?number` |
 
 ```http
   PUT /user
@@ -164,7 +165,7 @@ appToken - jwt генерируем из рандомного объекта в 
 ```json
 {
   "isSuccess": true,
-  "message": "User`s score was successfully updated"
+  "message": "User was successfully updated"
 }
 ```
 
