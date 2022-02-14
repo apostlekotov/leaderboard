@@ -206,7 +206,7 @@ appToken - jwt генерируем из рандомного объекта в 
 
 ### Clear leaderboard 🗝
 
-Если score > pb то пихаем score в pb и записываем 0 в score
+Записываем 0 в score
 
 ```http
   DELETE /leaderboard
