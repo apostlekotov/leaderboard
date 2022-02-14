@@ -104,8 +104,7 @@ const clearLeaderboard = async (_: Request, res: Response) => {
     await getConnection()
       .createQueryBuilder()
       .update(User)
-      .set({ pb: () => "score", score: 0 })
-      .where("score > pb")
+      .set({ score: 0 })
       .execute();
 
     return res.status(200).json({

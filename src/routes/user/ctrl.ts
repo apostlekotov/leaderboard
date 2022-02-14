@@ -112,9 +112,13 @@ const updateUser = async (req: Request, res: Response) => {
     const score: number | undefined = req.body?.score;
     const avatar: number | undefined = req.body?.avatar;
 
-    const updatedData: { score?: number; avatar?: number } = {};
+    const updatedData: { score?: number; pb?: number; avatar?: number } = {};
 
-    if (score) updatedData.score = score;
+    if (score) {
+      updatedData.score = score;
+      updatedData.pb = user.pb < score ? score : user.pb;
+    }
+
     if (avatar) updatedData.avatar = avatar;
 
     await User.update({ id: user.id }, updatedData);
