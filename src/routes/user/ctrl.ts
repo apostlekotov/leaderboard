@@ -31,7 +31,10 @@ const verifyEmail = async (req: Request, res: Response) => {
     sendEmail(
       user.email,
       "Email verification",
-      `${generateCode("verify-email", userId)}`
+      `Hello!<br/>Your registration confirm code: ${generateCode(
+        "verify-email",
+        userId
+      )}`
     );
 
     return res.status(200).json({
@@ -77,7 +80,12 @@ const resetPassword = async (req: Request, res: Response) => {
       sendEmail(
         user.email,
         "Reset password",
-        `${generateCode("reset-password", user.id)}`
+        `Hello!<br/>Your reset password data:<br/>E-mail: ${
+          user.email
+        }<br/>Login: ${user.username}<br/>Confirm code: ${generateCode(
+          "reset-password",
+          user.id
+        )}`
       );
 
       return res.status(200).json({
